@@ -147,9 +147,18 @@ function captureAdd(Item, resp) {
         var aria2 = new ARIA2(settings.get('rpcpath')), params = {};
         params.referer = resp.taburl;
         params.header = "Cookie:" + resp.pagecookie;
-        params.out = Item.filename;
+        
+        var ext = Item.filename.split(".");
+        if( ext.length === 1 || ( ext[0] === "" && ext.length === 2 ) ) {
+            ext = "";
+        }else{
+            ext = ext.pop().toLowerCase();
+        }
+        
+        params.out = document.title +"."+ ext;
         chrome.downloads.cancel(Item.id, function() {aria2.addUri(Item.url, params);});
-        //console.log(Item);
+        console.log(Item);
+        //document.title
         showNotification();
     }
 }
